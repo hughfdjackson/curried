@@ -1,21 +1,21 @@
 {
-  "name": "curry",
-  "description": "flexible but simple curry function",
-  "version": "1.1.0",
-  "homepage": "https://github.com/dominictarr/curry",
+  "name": "curried",
+  "description": "curried standard lib",
+  "version": "0.0.1",
+  "homepage": "https://github.com/hughfdjackson/curried",
   "repository": {
     "type": "git",
-    "url": "git://github.com/dominictarr/curry.git"
+    "url": "git://github.com/hughfdjackson/curried.git"
   },
-  "author": "Dominic Tarr <dominic.tarr@gmail.com>",
-  "contributors": [
-    "Hugh FD Jackson <hughfdjackson@googlemail.com>"
-  ],
-  "main": "./curry",
+  "author": "Hugh FD Jackson <hughfdjackson@googlemail.com>",
+  "main": "./curried",
   "devDependencies": {
     "mocha": "1.8.1",
     "browserify": "2.17.2",
     "uglify-js": "2.3.6"
+  },
+  "dependencies": {
+    "curry": "1.2.0"
   },
   "testling": {
     "files": "test/*-test.js",
@@ -36,6 +36,6 @@
   },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test",
-    "prepublish": "./node_modules/browserify/bin/cmd.js --standalone curry -e curry.js | ./node_modules/uglify-js/bin/uglifyjs > curry.min.js"
+    "prepublish": "./node_modules/browserify/bin/cmd.js --standalone curried -e curried.js | ./node_modules/uglify-js/bin/uglifyjs > curried.min.js"
   }
 }
