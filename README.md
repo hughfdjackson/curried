@@ -11,7 +11,7 @@ Curried provides a standard library of utility functions to make writing functio
 
 * The expressivity of currying;
 * ALL functions non-mutating*;
-* polymorphism against interfaces instead of implementation.
+* polymorphism; interfaces over implementation.
 
 \* assuming that the types that implement the basic interfaces are ALSO non-mutating.  They should be. Who the heck makes a mutating map, or reduce? mad-men, that's who.
 
@@ -36,15 +36,10 @@ This library assumes an ECMAScript 5 compatible, or the inclusion of es5-shim.
 
 * compose (uncurried) <3
 
-### Under consideration
-
-* invoke
-* invokeWith
 * get
-* sortBy
-* sort
-* combine/extend
-* get ?
+* combine
+
+### Under consideration
 
 Fantasy land stuff:
 * mapply
@@ -52,7 +47,4 @@ Fantasy land stuff:
 * chain
 * of
 
-### Under consideration
-
 * fallbacks for arrays and objects where appropriate?
-* Assume es5/es5-shim

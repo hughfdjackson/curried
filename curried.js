@@ -1,15 +1,21 @@
 'use strict';
 
 var curry = require('curry');
+
 var unary = function(fn){ return function(a){ return fn(a) } }
 var binary = function(fn){ return function(a, b){ return fn(a, b) } }
 var negate = function(fn){ return function(a){ return !fn(a) } }
-var toArray = function(arrayLike){ return Array.prototype.slice.call(arrayLike) }
 
+var toArray = function(arrayLike){ return Array.prototype.slice.call(arrayLike) }
 var body = function(a){ return a.slice(0, a.length - 1) }
 var last = function(a){ return a[a.length - 1] }
 
-// (a -> b), Mappable c -> Mappable c
+// Interfaces:
+// Functor - has a map method
+// Reducible - has a reduce and reduceRight method
+// Filterable - has a filter method
+
+// (a -> b), Functor c -> Functor c
 var map = curry(function(fn, val){
 	return val.map(unary(fn));
 });
@@ -65,6 +71,11 @@ var compose = function(){
 	});
 };
 
+// String, val -> val
+var get = curry(function(prop, val){
+	return val[prop];
+});
+
 module.exports = {
 	map: map,
 	reduce: reduce,
@@ -75,5 +86,6 @@ module.exports = {
 	reject: reject,
 	invoke: invoke,
 	invokeWith: invokeWith,
-	compose: compose
+	compose: compose,
+	get: get
 }

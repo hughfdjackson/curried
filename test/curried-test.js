@@ -120,7 +120,6 @@ describe('invoke', function(){
     });
 });
 
-
 describe('compose', function(){
     var compose = _.compose;
     var trimL = function(a){ return a.replace(/^[ ]+/, '') }
@@ -138,7 +137,14 @@ describe('compose', function(){
         a.equal(catTrim.length, 1);
 
         a.equal(catTrim([' ', '3', '4', 'a', ' ', 'c', ' ']), '34a c');
+    });
+});
 
+describe('get', function(){
+    var get = _.get;
+    var getX = get('x');
 
+    it('should retrieve a property from an object', function(){
+        a.equal(getX({ x: 2 }), 2);
     });
 });
