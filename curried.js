@@ -25,7 +25,7 @@ var reduce = curry(function(fn, val){
 	return val.reduce(binary(fn));
 });
 
-// (a, b -> c), Reducible d-> c
+// (a, b -> c), Reducible d -> c
 var reduceRight = curry(function(fn, val){
 	return val.reduceRight(binary(fn));
 });
