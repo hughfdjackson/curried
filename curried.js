@@ -20,12 +20,12 @@ var map = curry(function(fn, val){
 	return val.map(unary(fn));
 });
 
-// (a, b -> c), d, Reducible e -> c
+// (a, b -> c), Reducible d -> c
 var reduce = curry(function(fn, val){
 	return val.reduce(binary(fn));
 });
 
-// (a, b -> c), d, Reducible e -> c
+// (a, b -> c), Reducible d-> c
 var reduceRight = curry(function(fn, val){
 	return val.reduceRight(binary(fn));
 });
