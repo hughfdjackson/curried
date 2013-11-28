@@ -127,14 +127,22 @@ var combine = curry(function(o1, o2){
 
 
 //--- Array, or Array-like ---//
+
+// Number, [a] -> [a]
 var take = curry(function(num, arr){
 	return arr.slice(0, num);
 });
 
+// [a] -> [a]
 var initial = function(a){ return a.slice(0, a.length - 1) }
+
+// [a] -> [a]
 var last = function(a){ return a.slice(1) };
 
+// [a] -> a
 var head = function(a){ return a[0] };
+
+// [a] -> a
 var tail = function(a){ 
 	if ( a.length > 0 ) return a[a.length - 1];
 	else return undefined;
