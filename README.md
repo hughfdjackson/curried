@@ -16,29 +16,26 @@ This library assumes an ECMAScript 5 compatible, or the inclusion of es5-shim.
 
 ## API
 
-### Polymorphic 
-
-* map
-* filter
-* reject
-
-* reduce (without seed)
-* reduceRight (without seed)
-
-* reduceFrom (with seed)
-* reduceRightFrom (with seed)
-
-### Function
-
-* flip
-* negate 
-* compose (uncurried) <3
-
-### Object (or Object-like)
-
-* invoke
-* invokeWith
-* get
-* pick
-* combine
-
+map
+reduce
+reduceRight
+reduceFrom
+reduceRightFrom
+filter
+reject
+compose
+negate
+flip
+identity
+tap
+constant
+invoke
+invokeWith
+get
+pick
+combine
+take
+head
+tail
+initial
+last
