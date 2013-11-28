@@ -1,11 +1,10 @@
 'use strict';
 
 var curry = require('curry');
+var r = require('restrictary');
+var unary = r.unary, binary = r.binary; 
 
-var unary = function(fn){ return function(a){ return fn(a) } }
-var binary = function(fn){ return function(a, b){ return fn(a, b) } }
 var negate = function(fn){ return function(a){ return !fn(a) } }
-
 var toArray = function(arrayLike){ return Array.prototype.slice.call(arrayLike) }
 var body = function(a){ return a.slice(0, a.length - 1) }
 var last = function(a){ return a[a.length - 1] }
@@ -76,6 +75,16 @@ var get = curry(function(prop, val){
 	return val[prop];
 });
 
+// [String], val -> val
+var pick = curry(function(props, val){ 
+	var addProp = function(acc, prop){ 
+		acc[prop] = val[prop]; 
+		return acc; 
+	}
+
+	return props.reduce(addProp, {});
+});
+
 module.exports = {
 	map: map,
 	reduce: reduce,
@@ -87,5 +96,6 @@ module.exports = {
 	invoke: invoke,
 	invokeWith: invokeWith,
 	compose: compose,
-	get: get
+	get: get,
+	pick: pick
 }

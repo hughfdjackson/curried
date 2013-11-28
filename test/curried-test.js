@@ -148,3 +148,17 @@ describe('get', function(){
         a.equal(getX({ x: 2 }), 2);
     });
 });
+
+
+describe('pick', function(){
+    var pick = _.pick;
+    var pick2DCoords = pick(['x', 'y']);
+
+    it('should retrieve an object of properties from an object', function(){
+        var coords3D = { x: 1, y: 2, z: 200 };
+        var coords2D = pick2DCoords(coords3D);
+
+        a.deepEqual(coords2D, { x: 1, y: 2 });
+    });
+});
+

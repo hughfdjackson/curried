@@ -15,7 +15,8 @@
     "uglify-js": "2.3.6"
   },
   "dependencies": {
-    "curry": "1.2.0"
+    "curry": "1.2.0",
+    "restrictary": "0.0.1"
   },
   "testling": {
     "files": "test/*-test.js",
