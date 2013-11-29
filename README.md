@@ -175,14 +175,34 @@ Invoke a method with arguments on a value:
 
 * get
 
-Get a propert from an object 
+Get a property from an object 
+
 * pick
+
+Get properties from object 
+
 * combine
+
+Combine two objects into one without mutation - preferring properties from the rightermost object
 
 ### Arrays 
 
 * take
+
+Take n from an array.
+
 * head
+
+Get the first element of an array
+
 * tail
+
+Get the last element of an array
+
 * initial
+
+Get all but the last element of an array.
+
 * last
+
+Get all but the first element of an array.
