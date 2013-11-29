@@ -47,10 +47,10 @@ describe('reduceRight', function(){
 });
 
 describe('reduceFrom', function(){
-    var cat = _.reduceFrom(function(a, b){ return a + b }, '');
+    var catWithPrefix = _.reduceFrom(function(a, b){ return a + b }, 'super awesome ');
 
     it('should expect a seed', function(){
-        a.equal(cat(['a', 'b', 'c']), 'abc');
+        a.equal(catWithPrefix(['a', 'b', 'c']), 'super awesome abc');
     });
 
     it('should restrict to binary', function(){
@@ -61,10 +61,10 @@ describe('reduceFrom', function(){
 });
 
 describe('reduceRightFrom', function(){
-    var reverseCat = _.reduceRightFrom(function(a, b){ return a + b }, '')
+    var reverseCatWithPrefix = _.reduceFrom(function(a, b){ return a + b }, 'super awesome ');
 
     it('should expect a seed', function(){
-        a.equal(reverseCat(['a', 'b', 'c']), 'cba');
+        a.equal(reverseCatWithPrefix(['a', 'b', 'c']), 'cba is cool');
     });
 
     it('should restrict to binary', function(){
