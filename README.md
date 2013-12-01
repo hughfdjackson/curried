@@ -197,7 +197,7 @@ Get the first element of an array
 
 * tail
 
-Get the last element of an array
+Get all but the first element of an array.
 
 * initial
 
@@ -205,4 +205,4 @@ Get all but the last element of an array.
 
 * last
 
-Get all but the first element of an array.
+Get the last element of an array

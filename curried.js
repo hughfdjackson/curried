@@ -59,10 +59,10 @@ var reject = curry(function(fn, val){
 // fn, fn ... -> fn
 var compose = function(){
 	var fns = toArray(arguments);
-	var tailFn = tail(fns);
+	var lastFn = last(fns);
 	var initialFns = initial(fns);
-	return curry.to(tailFn.length, function(){
-		var seed = tailFn.apply(null, arguments);
+	return curry.to(lastFn.length, function(){
+		var seed = lastFn.apply(null, arguments);
 		return initialFns.reduceRight(function(val, fn){ return fn(val) }, seed);
 	});
 };
@@ -136,17 +136,18 @@ var take = curry(function(num, arr){
 // [a] -> [a]
 var initial = function(a){ return a.slice(0, a.length - 1) }
 
-// [a] -> [a]
-var last = function(a){ return a.slice(1) };
+// [a] -> a
+var last = function(a){ 
+	if ( a.length > 0 ) return a[a.length - 1];
+	else return undefined;
+}
 
 // [a] -> a
 var head = function(a){ return a[0] };
 
-// [a] -> a
-var tail = function(a){ 
-	if ( a.length > 0 ) return a[a.length - 1];
-	else return undefined;
-}
+// [a] -> [a]
+var tail = function(a){ return a.slice(1) };
+
 
 module.exports = {
 	map: map,

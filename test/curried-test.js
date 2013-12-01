@@ -61,10 +61,10 @@ describe('reduceFrom', function(){
 });
 
 describe('reduceRightFrom', function(){
-    var reverseCatWithPrefix = _.reduceFrom(function(a, b){ return a + b }, 'super awesome ');
+    var reverseCatWithPrefix = _.reduceRightFrom(function(a, b){ return a + b }, 'super awesome ');
 
     it('should expect a seed', function(){
-        a.equal(reverseCatWithPrefix(['a', 'b', 'c']), 'cba is cool');
+        a.equal(reverseCatWithPrefix(['a', 'b', 'c']), 'super awesome cba');
     });
 
     it('should restrict to binary', function(){
@@ -245,14 +245,10 @@ describe('head', function(){
 });
 
 describe('tail', function(){
-    it('should take the last element of an array', function(){
-        a.deepEqual(_.tail([1, 2, 3]), 3)
-        a.deepEqual(_.tail([]), undefined);
-
-        var trickArr = [];
-        trickArr[-1] = 'fake value';
-
-        a.deepEqual(_.tail(trickArr), undefined);
+    it('should give an array with all but the first member', function(){
+        a.deepEqual(_.tail([1, 2, 3]), [2, 3]);
+        a.deepEqual(_.tail([1]), []);
+        a.deepEqual(_.tail([]), []);
     });
 });
 
@@ -265,9 +261,13 @@ describe('initial', function(){
 });
 
 describe('last', function(){
-    it('should give an array with all but the first member', function(){
-        a.deepEqual(_.last([1, 2, 3]), [2, 3]);
-        a.deepEqual(_.last([1]), []);
-        a.deepEqual(_.last([]), []);
+    it('should take the last element of an array', function(){
+        a.deepEqual(_.last([1, 2, 3]), 3)
+        a.deepEqual(_.last([]), undefined);
+
+        var trickArr = [];
+        trickArr[-1] = 'fake value';
+
+        a.deepEqual(_.last(trickArr), undefined);
     });
 });
