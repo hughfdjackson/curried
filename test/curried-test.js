@@ -316,3 +316,9 @@ describe('constant', function(){
         a.equal(constantO(), o)
     });
 });
+
+describe('curry', function(){
+    it('should be exported (same as npm/curry)', function(){
+        a.ok('curry' in _);
+    });
+});

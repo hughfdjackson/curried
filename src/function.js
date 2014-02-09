@@ -46,5 +46,6 @@ module.exports = {
     identity: identity,
     constant: constant,
     flip: flip,
-    tap: tap
+    tap: tap,
+    curry: curry
 }
