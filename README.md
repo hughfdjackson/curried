@@ -1,208 +1,285 @@
 # Curried
 
-**WARNING: experimental - feedback welcome**
-
-Functional utility library. curried, polymorphic, awesome.
-
 [![browser support](https://ci.testling.com/hughfdjackson/curried.png)](https://ci.testling.com/hughfdjackson/curried)
 
-# Why
+Awesome curried standard library.
 
-These are the tools that I find myself writing over and over, day in, day out.  A curried toolkit really is invaluable.
+## Installation
 
-# Requirements
+In your project folder:
+```
+npm install curried --save
+```
 
-This library assumes an ECMAScript 5 compatible, or the inclusion of es5-shim.
+In a file:
+```
+var _ = require('curried');
+```
 
 ## API
 
-### Polymorphic
+### COLLECTION
 
-Polymorphic functions delegate to methods on one of the arguments passed in.  For instance,
+*Functions that work on arrays or objects.*
 
-* map - delegates to .map
-
-
-```javascript
-var mapInc = curried.map(function(a){ return a + 1 });
-
-mapInc([1, 2, 3]) //= [2, 3, 4];
-```
-
-* reduce - delegates to .reduce
-
-Reduces a collection without an initial seed.
+#### map
 
 ```javascript
-var cat = curried.reduce(function(a, b){ return a + b });
+var mapInc = _.map(function(a){ return a + 1 });
 
-cat(['a', 'b', 'c']) //= 'abc'
+mapInc([1, 2, 3]) //= [2, 3, 4]
+
+mapInc({ x: 1, y: 2, z: 3 }) //= { x: 2, y: 3, z: 4 }
 ```
 
-* reduceRight - delegates to .reduceRight
-
-Reduces a collection without an initial seed, but from the right.
-
-```javascript
-var reverseCat = _.reduceRight(function(a, b){ return a + b })
-
-reverseCat(['a, 'b', 'c']) //= 'cba'
-```
-
-* reduceFrom - delegates to .reduce
-
-Reduces a collection with a seed.
-
-```javascript
-var catWithPrefix = _.reduceFrom(function(a, b){ return a + b }, 'super awesome ');
-
-catWithPrefix(['a', 'b', 'c']) //= 'super awesome abc'
-```
-
-* reduceRightFrom - delegates to .reduceRight
-
-Reduces a collection with a seed, but from the right.
-
-```javascript
-var reverseCatWithPrefix = _.reduceFrom(function(a, b){ return a + b }, 'super awesome ');
-
-reverseCatWithPrefix(['a', 'b', 'c']) //= 'super awesome cba'
-```
-
-* filter - delegates to .filter
-
-Filters out collection members for which a predicate function returns *false*.
+#### filter
 
 ```javascript
 var isString = function(a){ return typeof a === 'string' };
 var filterString = _.filter(isString);
 
 filterString([1, 2, 'a', 3, 'b']) //= ['a', 'b']
+
+filterString({ x: 1, y: 2, z: 'a', a: 3, b: 'b' }) //= { z: 'a', b: 'b' }
 ```
 
-* reject - delegates to .filter
-
-Inverse of filter - filters out collection members for which a predicate function returns *true*.
+#### reject
 
 ```javascript
 var isString = function(a){ return typeof a === 'string' };
 var filterNotString = _.reject(isString);
 
 filterNotString([1, 2, 'a', 3, 'b']) //= [1, 2, 3]
+
+filterNotString({ x: 1, y: 2, z: 'a', a: 3, b: 'b' }) //= { x: 1, y: 2, a: 3 }
 ```
 
-### Functions
-
-* compose 
-
-Standard compose - chains together functions so that a values are piped from the rightmost through to the leftmost.  Returns a curried function as a result.
+#### every
 
 ```javascript
-var add = function(a, b){ return a + b };
-var halve = function(a){ return a / 2 };
+var isString = function(a){ return typeof a === 'string' };
+var allString = _.every(isString);
 
-var addAndHalve = _.compose(halve, add);
-var add1AndHalve = addAndHalve(1);
+allString([1, 2, 'a', 3, 'b']) //= false
 
-add1AndHalf(3) //= 2
+allString(['a', '3', 'b']) //= true
+
+allString({ x: 1, y: 2, z: 'a' }) //= false
+a.ok(allString({ x: '1', y: 'b', z: 'a' }) //= true
 ```
 
-* negate
-
-'Flips' the boolean return from a predicate.  Will return false instead of truthy, and true instead of falsey.
+#### some
 
 ```javascript
-var notString = _.negate(isString);
+var isString = function(a){ return typeof a === 'string' };
+var someString = _.some(isString);
 
-notString(1) //= true
-notString('2') //= false
+someString([1, 2, 'a', 3, 'b']) //= true
+someString([3, 4]) //= false
+
+someString({ x: 1, y: 2, z: 'a' }) //= true
+someString({ x: 1, y: 2, z: 3 }) //= false
 ```
-* flip
 
-Flips a binary function's argument order.  
+#### reduce
 
 ```javascript
-
+var cat = _.reduce(function(a, b){ return a + b });
+cat(['a', 'b', 'c']) //= 'abc'
 ```
 
-* identity
-
-Return the value passed in.
+Since objects don't have guaranteed order in ECMAScript, it's only safe to reduce over objects with operations
+that don't need arguments in any particular order (commutative).
 
 ```javascript
-_.identity(1) //= 1 
+var sum = _.reduce(function(a, b){ return a + b });
+sum({ x: 1, y: 2, z: 3 }) //= 6
 ```
-* constant
 
-Creates a function that always returns the same value
+#### reduceRight
 
 ```javascript
-var always1 = _.constant(1);
+var reverseCat = _.reduceRight(function(a, b){ return a + b });
+reverseCat(['a', 'b', 'c']) //= 'cba'
 
-always1() //= 1 
+var sum = _.reduceRight(function(a, b){ return a + b });
+sum({ x: 1, y: 2, z: 3 }) //= 6
 ```
 
-* tap
-
-Takes a function to execute for its side-effect only, and otherwise creates a function that acts like the identity function.
-
-Useful for adding loggers to promise chains, for example:
+#### reduceFrom
 
 ```javascript
-var log = _.tap(console.log);
+var catWithPrefix = _.reduceFrom(function(a, b){ return a + b }, 'super awesome ');
+a.equal(catWithPrefix(['a', 'b', 'c']), 'super awesome abc');
 
-fetchUserData()
-	.then(log)
-	.then(myNextStep);
+var sumFrom3 = _.reduceFrom(function(a, b){ return a + b }, 3)
+a.equal(sumFrom3({ x: 1, y: 2, z: 3 }), 9);
 ```
 
-### Objects 
+#### reduceRightFrom
 
-* invoke
+```javascript
+var reverseCatWithPrefix = _.reduceRightFrom(function(a, b){ return a + b }, 'super awesome ');
+reverseCatWithPrefix(['a', 'b', 'c']) //= 'super awesome cba'
 
-Invoke a method on a value:
+var sumFrom3 = _.reduceRightFrom(function(a, b){ return a + b }, 3);
+sumFrom3({ x: 1, y: 2, z: 3 }) //= 9
+```
+
+### OBJECT (or object-like)
+
+#### invoke
 
 ```javascript
 var toString = _.invoke('toString');
 
-toString([1, 2, 3]) //= '[1, 2, 3]''
+['abc', 1, true, {}].map(toString(val)) //= ['abc', '1', 'true', '[object Object]']
 ```
 
-* invokeWith
+#### invokeWith
 
-Invoke a method with arguments on a value:
+```javascript
+var mapInc = _.invokeWith('parse', [function(a){ return a + 1 }]);
+mapInc([1, 2, 3]) //= [2, 3, 4]
+```
+
+#### get
+
+```javascript
+var getX = _.get('x');
+getX({ x: 2 }) //= 2
+```
+
+#### pick
+
+```javascript
+var pick2DCoords = _.pick(['x', 'y']);
+var coords3D = { x: 1, y: 2, z: 200 };
+
+pick2DCoords(coords3D) //= { x: 1, y: 2 }
+```
+
+#### combine
+
+```javascript
+var defaults = _.combine({ firstName: 'joe', lastName: 'bloggs' });
+
+defaults({ lastName: 'shufflebottom'} //= { firstName: 'joe', lastName: 'shufflebottom' }
+```
+
+#### keys
+
+```javascript
+_.keys({ x: 1, y: 2, z: 3 }) //= ['x', 'y', 'z']
+```
+
+#### values
+
+```javascript
+_.values({ x: 1, y: 2, z: 3 }) //= [1, 2, 3]
+```
+
+### ARRAY,
 
 
-* get
+#### take
 
-Get a property from an object 
 
-* pick
+```javascript
+var take5 = _.take(5);
+take5([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) //= [1, 2, 3, 4, 5]
+```
 
-Get properties from object 
+#### head
 
-* combine
+```javascript
+_.head([1, 2, 3]) //= 1
+_.head([]) //= undefined
+```
 
-Combine two objects into one without mutation - preferring properties from the rightermost object
+#### tail
 
-### Arrays 
+```javascript
+_.tail([1, 2, 3]) //= [2, 3]
+_.tail([1]) //= []
+_.tail([]) //= []
+```
 
-* take
+#### initial
 
-Take n from an array.
+```javascript
+_.initial([1, 2, 3]) //= [1, 2]
+_.initial([1]) //= []
+_.initial([]) //= []
+```
 
-* head
+#### last
 
-Get the first element of an array
+```javascript
+_.last([1, 2, 3]) //= 3
+_.last([]) //= undefined
+```
 
-* tail
+### FUNCTION
 
-Get all but the first element of an array.
+#### compose
 
-* initial
+```javascript
+var trimL = function(a){ return a.replace(/^[ ]+/, '') }
+var trimR = function(a){ return a.replace(/[ ]+$/, '') }
+var upperCaseTrim = _.compose(trimL, trimR, _.invoke('toUpperCase'));
 
-Get all but the last element of an array.
+upperCaseTrim(' abc ') //= 'ABC'
+```
 
-* last
+#### negate
 
-Get the last element of an array
+```javascript
+var isTruthy = function(a){ return !!a };
+var isFalsey = _.negate(isTruthy);
+
+isFalsey(0) //= true
+isFalsey(1) //= false
+isFalsey('') //= true
+isFalsey('abc') //= false
+isFalsey({}) //= false
+```
+
+#### flip
+
+```javascript
+var cat = function(a, b){ return a + b };
+var flipCat = _.flip(cat);
+var suffixIsm = flipCat('ism');
+
+suffixIsm('loyal') //= 'loyalism'
+```
+
+#### identity
+
+```javascript
+var o = {}
+_.identity(o) === o //= true
+```
+
+#### tap
+
+```javascript
+var logs = [];
+var log = function(a){ logs.push(a) };
+
+var identityLog = _.tap(log);
+
+identityLog('a') //= 'a'
+logs[0] //= 'a'
+```
+
+#### constant
+
+```javascript
+constant('a')() //= 'a'
+```
+
+#### curry
+
+Same as [curry](http://npmjs.org/package/curry)

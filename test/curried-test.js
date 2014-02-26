@@ -74,67 +74,55 @@ describe('some', function(){
 
 describe('reduce', function(){
     var cat = _.reduce(function(a, b){ return a + b });
+    var sum = cat;
 
     it('reducing over an array', function(){
         a.equal(cat(['a', 'b', 'c']), 'abc');
     });
 
     it('reduce over an object', function(){
-        var str = cat({ x: 'a', y: 'b', z: 'c' });
-        a.ok(/a/.test(str));
-        a.ok(/b/.test(str));
-        a.ok(/c/.test(str));
+        a.equal(sum({ x: 1, y: 2, z: 3 }), 6);
     });
 });
 
 describe('reduceRight', function(){
     var reverseCat = _.reduceRight(function(a, b){ return a + b })
+    var sum = reverseCat;
 
     it('reducing over an array', function(){
         a.equal(reverseCat(['a', 'b', 'c']), 'cba');
     });
 
     it('reduce over an object', function(){
-        var str = reverseCat({ x: 'a', y: 'b', z: 'c' });
-        a.ok(/a/.test(str));
-        a.ok(/b/.test(str));
-        a.ok(/c/.test(str));
+        a.equal(sum({ x: 1, y: 2, z: 3 }), 6);
     });
 });
 
 describe('reduceFrom', function(){
     var prefix = 'super awesome ';
     var catWithPrefix = _.reduceFrom(function(a, b){ return a + b }, prefix);
+    var sumFrom3 = _.reduceFrom(function(a, b){ return a + b }, 3)
 
     it('should expect a seed - reducing over an array', function(){
         a.equal(catWithPrefix(['a', 'b', 'c']), prefix + 'abc');
     });
 
     it('should expect a seed - reduce over an object', function(){
-        var str = catWithPrefix({ x: 'a', y: 'b', z: 'c' });
-        a.ok(/a/.test(str));
-        a.ok(/b/.test(str));
-        a.ok(/c/.test(str));
-
-        a.equal(str.substr(0, prefix.length), prefix);
+        a.equal(sumFrom3({ x: 1, y: 2, z: 3 }), 9);
     });
 });
 
 describe('reduceRightFrom', function(){
     var prefix = 'super awesome ';
     var reverseCatWithPrefix = _.reduceRightFrom(function(a, b){ return a + b }, prefix);
+    var sumFrom3 = _.reduceRightFrom(function(a, b){ return a + b }, 3)
 
     it('should expect a seed - reducing over an array', function(){
         a.equal(reverseCatWithPrefix(['a', 'b', 'c']), prefix + 'cba');
     });
 
     it('should expect a seed - reduce over an object', function(){
-        var str = reverseCatWithPrefix({ x: 'a', y: 'b', z: 'c' });
-        a.ok(/a/.test(str));
-        a.ok(/b/.test(str));
-        a.ok(/c/.test(str));
-
-        a.equal(str.substr(0, prefix.length), prefix);
+        a.equal(sumFrom3({ x: 1, y: 2, z: 3 }), 9);
     });
 });
 
@@ -269,8 +257,9 @@ describe('compose', function(){
 });
 
 describe('negate', function(){
-    it('should flip falsey returns to true, and truthy returns to false', function(){ 
-        var isFalsey = _.negate(_.identity);
+    it('should flip falsey returns to true, and truthy returns to false', function(){
+        var isTruthy = function(a){ return !!a };
+        var isFalsey = _.negate(isTruthy);
 
         a.equal(isFalsey(0), true);
         a.equal(isFalsey(1), false);
@@ -311,9 +300,7 @@ describe('tap', function(){
 
 describe('constant', function(){
     it('should return a function that will return the value passed when called', function(){
-        var o = {};
-        var constantO = _.constant(o);
-        a.equal(constantO(), o)
+        a.equal(_.constant('a')(), 'a')
     });
 });
 
