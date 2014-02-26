@@ -61,11 +61,10 @@ var isString = function(a){ return typeof a === 'string' };
 var allString = _.every(isString);
 
 allString([1, 2, 'a', 3, 'b']) //= false
-
 allString(['a', '3', 'b']) //= true
 
 allString({ x: 1, y: 2, z: 'a' }) //= false
-a.ok(allString({ x: '1', y: 'b', z: 'a' }) //= true
+allString({ x: '1', y: 'b', z: 'a' }) //= true
 ```
 
 #### some
@@ -110,10 +109,10 @@ sum({ x: 1, y: 2, z: 3 }) //= 6
 
 ```javascript
 var catWithPrefix = _.reduceFrom(function(a, b){ return a + b }, 'super awesome ');
-a.equal(catWithPrefix(['a', 'b', 'c']), 'super awesome abc');
+catWithPrefix(['a', 'b', 'c']) //= 'super awesome abc'
 
-var sumFrom3 = _.reduceFrom(function(a, b){ return a + b }, 3)
-a.equal(sumFrom3({ x: 1, y: 2, z: 3 }), 9);
+var sumFrom3 = _.reduceFrom(function(a, b){ return a + b }, 3);
+sumFrom3({ x: 1, y: 2, z: 3 }) //= 9
 ```
 
 #### reduceRightFrom
