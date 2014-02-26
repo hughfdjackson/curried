@@ -62,12 +62,16 @@ var reject = curry(function(fn, val){
 
 // (a -> Boolean), Collection -> Boolean
 var every = curry(function(fn, val){ 
+    fn = unary(fn);
+
     if ( isArray(val) ) return val.every(fn);
     else return everyObject(val, fn);
 });
 
 // (a -> Boolean), Collection -> Boolean
 var some = curry(function(fn, val){ 
+    fn = unary(fn);
+
     if ( isArray(val) ) return val.some(fn);
     else return someObject(val, fn);
 })
