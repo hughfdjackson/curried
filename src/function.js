@@ -16,7 +16,13 @@ var compose = function(){
     });
 };
 
-var negate = curry(function(fn, a){ 
+// fn, fn ... -> fn
+var pipe = function(){
+    var reversedArgs = toArray(arguments).reverse();
+    return compose.apply(null, reversedArgs);
+}
+
+var negate = curry(function(fn, a){
     return !fn(a);
 });
 
@@ -36,12 +42,13 @@ var flip = curry(function(fn, a, b){
 });
 
 // ( a -> ), a -> a
-var tap = curry(function(fn, a){ 
+var tap = curry(function(fn, a){
     fn(a); return a;
 });
 
 module.exports = {
     compose: compose,
+    pipe: pipe,
     negate: negate,
     identity: identity,
     constant: constant,

@@ -18,6 +18,116 @@ var _ = require('curried');
 
 ## API
 
+### FUNCTION
+
+Functions that produce functions - the heart of the library in many senses!
+
+#### curry
+
+Lifted directly from npm [curry](http://npmjs.org/package/curry); this is the function this library uses to produce its own curried functions.
+
+#### compose
+
+Chains together functions from right to left, passing the value each function produces into the next:
+
+```javascript
+var appendWithHellYea = function(str){ return str + 'hell yea!' };
+var appendSpace = function(str){ return str + ' ' };
+var shout = function(str){ return str.toUpperCase() };
+var hellYea = _.compose(appendWithHellYea, appendSpace, shout);
+
+hellYea('functions!') //= 'FUNCTIONS! hell yea!'
+```
+
+The above code is the same as `appendWithHellYea(appendSpace(shout('functions!')))`
+
+#### pipe
+
+To a whole lot of people, compose looks backwards.  Pipe is compose the 'right way around', sorta like unix pipes.
+
+```javascript
+var appendWithHellYea = function(str){ return str + 'hell yea!' };
+var appendSpace = function(str){ return str + ' ' };
+var shout = function(str){ return str.toUpperCase() };
+var hellYea = _.compose(shout, appendSpace, appendWithHellYea);
+
+hellYea('functions!') //= 'FUNCTIONS! hell yea!'
+```
+
+#### negate
+
+Returns a function that returns `false` when the original returned `true`, and vice versa.
+
+```javascript
+var isTruthy = function(a){ return !!a };
+var isFalsey = _.negate(isTruthy);
+
+isFalsey(0) //= true
+isFalsey(1) //= false
+isFalsey('') //= true
+isFalsey('abc') //= false
+isFalsey({}) //= false
+```
+
+#### flip
+
+Returns a function with the argument order flipped
+```javascript
+var prependWith = _.curry(function(a, b){ return a + b });
+var appendWith = _.flip(prependWith);
+var appendIsm = appendWith('ism');
+
+appendIsm('functional') // 'functionalism'
+```
+
+#### identity
+
+Returns the value passed into it.
+
+```javascript
+var o = {}
+_.identity(o) === o //= true
+```
+
+In the functional world - where a function is often passed in to do some processing - it's the equivalent of a no-op.
+
+```javascript
+var passCollectionThrough = _.map(_.identity);
+
+passCollectionThrough([1, 2, 3]) //= [1, 2, 3]
+
+var pointlesslyComplexIdentity = _.compose(_.identity, _.identity, _.identity);
+pointlesslyComplexIdentity('a') //= 'a'
+```
+
+#### tap
+
+If you're writing composition-heavy code, sometime's it's really important to be able to inject a step in the middle for debugging purposes.
+
+```javascript
+var log = _.tap(function(value){ console.log(value) });
+var shout = _.invoke('toUpperCase');
+var appendWith = _.curry(function(a, b){ return b + a });
+
+_.pipe(shout, log, appendWith('!'))('log this') //= 'LOG THIS!'
+// console.log logs 'LOG THIS' - without the trailing !
+```
+
+#### constant
+
+Creates a function that always returns the same value.  
+```javascript
+constant('a')() //= 'a'
+```
+
+This can be particularly useful if you're expected to return a function, but really just want a value.  For instance, handling values in promise chains:
+
+```javascript
+getUserFromDB('bob smith')
+    .then(null, _.constant('john doe'))
+    .then(console.log)
+```
+
 ### COLLECTION
 
 Collection functions work on Arrays AND objects.
@@ -221,69 +331,3 @@ _.initial([]) //= []
 _.last([1, 2, 3]) //= 3
 _.last([]) //= undefined
 ```
-
-### FUNCTION
-
-Functions that produce functions.
-
-#### compose
-
-```javascript
-var trimL = function(a){ return a.replace(/^[ ]+/, '') }
-var trimR = function(a){ return a.replace(/[ ]+$/, '') }
-var upperCaseTrim = _.compose(trimL, trimR, _.invoke('toUpperCase'));
-
-upperCaseTrim(' abc ') //= 'ABC'
-```
-
-#### negate
-
-```javascript
-var isTruthy = function(a){ return !!a };
-var isFalsey = _.negate(isTruthy);
-
-isFalsey(0) //= true
-isFalsey(1) //= false
-isFalsey('') //= true
-isFalsey('abc') //= false
-isFalsey({}) //= false
-```
-
-#### flip
-
-```javascript
-var cat = function(a, b){ return a + b };
-var flipCat = _.flip(cat);
-var suffixIsm = flipCat('ism');
-
-suffixIsm('loyal') //= 'loyalism'
-```
-
-#### identity
-
-```javascript
-var o = {}
-_.identity(o) === o //= true
-```
-
-#### tap
-
-```javascript
-var logs = [];
-var log = function(a){ logs.push(a) };
-
-var identityLog = _.tap(log);
-
-identityLog('a') //= 'a'
-logs[0] //= 'a'
-```
-
-#### constant
-
-```javascript
-constant('a')() //= 'a'
-```
-
-#### curry
-
-Same as [curry](http://npmjs.org/package/curry)

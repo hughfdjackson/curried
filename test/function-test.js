@@ -5,21 +5,38 @@ var a = require('assert');
 var sinon = require('sinon');
 
 describe('compose', function(){
-    var prependWith = _.curry(function(a, b){ return a + b });
-    var addSpace = _.curry(function(str){ return str + ' ' });
-    var appendWith = _.flip(prependWith);
-    var shout = _.invoke('toUpperCase');
-    var hellYea = _.compose(appendWith('hell yea!'), addSpace, appendWith('!!!'), shout);
+    var appendWithHellYea = function(str){ return str + 'hell yea!' };
+    var appendSpace = function(str){ return str + ' ' };
+    var shout = function(str){ return str.toUpperCase() };
+    var hellYea = _.compose(appendWithHellYea, appendSpace, shout);
 
     it('should chain the return value from right to left through the functions provided', function(){
-        a.equal(hellYea('functions'), 'FUNCTIONS!!! hell yea!');
+        a.equal(hellYea('functions!'), 'FUNCTIONS! hell yea!');
     });
 
     it('should return a curried function as a result', function(){
-        var hellYeaWithPrepend = _.compose(hellYea, prependWith);
-        var hellYeaWithLeadingWoo = hellYeaWithPrepend('Woo! ');
+        var prependWoo = function(str){ return 'Woo! ' + str };
+        var hellYeaWithLeadingWoo = _.compose(hellYea, prependWoo);
 
-        a.equal(hellYeaWithLeadingWoo('functions'), 'WOO! FUNCTIONS!!! hell yea!');
+        a.equal(hellYeaWithLeadingWoo('functions!'), 'WOO! FUNCTIONS! hell yea!');
+    });
+});
+
+describe('pipe', function(){
+    var appendWithHellYea = function(str){ return str + 'hell yea!' };
+    var appendSpace = function(str){ return str + ' ' };
+    var shout = function(str){ return str.toUpperCase() };
+    var hellYea = _.pipe(shout, appendSpace, appendWithHellYea);
+
+    it('should chain the return value from left to right through the functions provided', function(){
+        a.equal(hellYea('functions!'), 'FUNCTIONS! hell yea!');
+    });
+
+    it('should return a curried function as a result', function(){
+        var prependWoo = function(str){ return 'Woo! ' + str };
+        var hellYeaWithLeadingWoo = _.pipe(prependWoo, hellYea);
+
+        a.equal(hellYeaWithLeadingWoo('functions!'), 'WOO! FUNCTIONS! hell yea!');
     });
 });
 
@@ -38,11 +55,11 @@ describe('negate', function(){
 
 describe('flip', function(){
     it('should flip and curry', function(){
-        var cat = function(a, b){ return a + b };
-        var flipCat = _.flip(cat);
-        var suffixIsm = flipCat('ism');
+        var prependWith = _.curry(function(a, b){ return a + b });
+        var appendWith = _.flip(prependWith);
+        var appendIsm = appendWith('ism');
 
-        a.equal(suffixIsm('loyal'), 'loyalism');
+        a.equal(appendIsm('functional'), 'functionalism');
     });
 });
 
