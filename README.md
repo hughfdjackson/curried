@@ -49,7 +49,7 @@ To a whole lot of people, compose looks backwards.  Pipe is compose the 'right w
 var appendWithHellYea = function(str){ return str + 'hell yea!' };
 var appendSpace = function(str){ return str + ' ' };
 var shout = function(str){ return str.toUpperCase() };
-var hellYea = _.compose(shout, appendSpace, appendWithHellYea);
+var hellYea = _.pipe(shout, appendSpace, appendWithHellYea);
 
 hellYea('functions!') //= 'FUNCTIONS! hell yea!'
 ```
