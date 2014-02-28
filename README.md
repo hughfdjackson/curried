@@ -1,8 +1,8 @@
 # Curried
 
-[![browser support](https://ci.testling.com/hughfdjackson/curried.png)](https://ci.testling.com/hughfdjackson/curried)
-
 Awesome curried standard library.
+
+[![browser support](https://ci.testling.com/hughfdjackson/curried.png)](https://ci.testling.com/hughfdjackson/curried)
 
 ## Installation
 
@@ -20,7 +20,7 @@ var _ = require('curried');
 
 ### COLLECTION
 
-*Functions that work on arrays or objects.*
+Collection functions work on Arrays AND objects.
 
 #### map
 
@@ -125,7 +125,9 @@ var sumFrom3 = _.reduceRightFrom(function(a, b){ return a + b }, 3);
 sumFrom3({ x: 1, y: 2, z: 3 }) //= 9
 ```
 
-### OBJECT (or object-like)
+### OBJECT
+
+Works on objects - or things that act like an object (i.e. have properties).
 
 #### invoke
 
@@ -178,8 +180,9 @@ _.keys({ x: 1, y: 2, z: 3 }) //= ['x', 'y', 'z']
 _.values({ x: 1, y: 2, z: 3 }) //= [1, 2, 3]
 ```
 
-### ARRAY,
+### ARRAY
 
+For those functions that only make sense with an ordered list.
 
 #### take
 
@@ -220,6 +223,8 @@ _.last([]) //= undefined
 ```
 
 ### FUNCTION
+
+Functions that produce functions.
 
 #### compose
 
