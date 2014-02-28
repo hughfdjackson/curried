@@ -4,15 +4,13 @@ var _ = require('../');
 var a = require('assert');
 var sinon = require('sinon');
 
-
 describe('invoke', function(){
     var toString = _.invoke('toString');
 
     it('should invoke the method specified', function(){
-        ['abc', 1, true, {}]
-            .forEach(function(val){
-                a.equal(toString(val), val.toString())
-            });
+        ['abc', 1, true, {}].forEach(function(val){
+            a.equal(toString(val), val.toString())
+        });
     });
 });
 
@@ -36,12 +34,10 @@ describe('get', function(){
 
 describe('pick', function(){
     var pick2DCoords = _.pick(['x', 'y']);
+    var coords3D = { x: 1, y: 2, z: 200 };
 
     it('should retrieve an object of properties from an object', function(){
-        var coords3D = { x: 1, y: 2, z: 200 };
-        var coords2D = pick2DCoords(coords3D);
-
-        a.deepEqual(coords2D, { x: 1, y: 2 });
+        a.deepEqual(pick2DCoords(coords3D), { x: 1, y: 2 });
     });
 });
 
@@ -57,12 +53,12 @@ describe('combine', function(){
 
 describe('keys', function(){
     it('should get an array of keys from an object', function(){
-        a.deepEqual(_.keys({ x: 1, y: 2, z: 3 }), ['x', 'y', 'z'])
+        a.deepEqual(_.keys({ x: 1, y: 2, z: 3 }), ['x', 'y', 'z']);
     });
 });
 
 describe('values', function(){
     it('should get an array of values from an object', function(){
-        a.deepEqual(_.values({ x: 1, y: 2, z: 3 }), [1, 2, 3])
+        a.deepEqual(_.values({ x: 1, y: 2, z: 3 }), [1, 2, 3]);
     });
 });

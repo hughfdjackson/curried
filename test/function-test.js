@@ -5,22 +5,21 @@ var a = require('assert');
 var sinon = require('sinon');
 
 describe('compose', function(){
-    var trimL = function(a){ return a.replace(/^[ ]+/, '') }
-    var trimR = function(a){ return a.replace(/[ ]+$/, '') }
-    var upperCaseTrim = _.compose(trimL, trimR, _.invoke('toUpperCase'));
+    var prependWith = _.curry(function(a, b){ return a + b });
+    var addSpace = _.curry(function(str){ return str + ' ' });
+    var appendWith = _.flip(prependWith);
+    var shout = _.invoke('toUpperCase');
+    var hellYea = _.compose(appendWith('hell yea!'), addSpace, appendWith('!!!'), shout);
 
-    it('should should work as expected', function(){
-        a.equal(upperCaseTrim(' abc '), 'ABC');
+    it('should chain the return value from right to left through the functions provided', function(){
+        a.equal(hellYea('functions'), 'FUNCTIONS!!! hell yea!');
     });
 
     it('should return a curried function as a result', function(){
-        var reduceFromThenTrim = _.compose(trimL, trimR, _.reduceFrom);
-        var catTrim = reduceFromThenTrim(function(a, b){ return a + b }, '');
+        var hellYeaWithPrepend = _.compose(hellYea, prependWith);
+        var hellYeaWithLeadingWoo = hellYeaWithPrepend('Woo! ');
 
-        a.equal(reduceFromThenTrim.length, 3);
-        a.equal(catTrim.length, 1);
-
-        a.equal(catTrim([' ', '3', '4', 'a', ' ', 'c', ' ']), '34a c');
+        a.equal(hellYeaWithLeadingWoo('functions'), 'WOO! FUNCTIONS!!! hell yea!');
     });
 });
 
@@ -74,6 +73,6 @@ describe('constant', function(){
 
 describe('curry', function(){
     it('should be exported (same as npm/curry)', function(){
-        a.ok('curry' in _);
+        a.equal(_.curry, require('curry'));
     });
 });
