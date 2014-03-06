@@ -244,7 +244,7 @@ Works on objects - or things that act like an object (i.e. have properties).
 ```javascript
 var toString = _.invoke('toString');
 
-['abc', 1, true, {}].map(toString(val)) //= ['abc', '1', 'true', '[object Object]']
+['abc', 1, true, {}].map(toString) //= ['abc', '1', 'true', '[object Object]']
 ```
 
 #### invokeWith
