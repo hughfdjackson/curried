@@ -4,45 +4,45 @@ var _ = require('../');
 var a = require('assert');
 var sinon = require('sinon');
 
-describe('compose', function(){
-    var appendWithHellYea = function(str){ return str + 'hell yea!' };
-    var appendSpace = function(str){ return str + ' ' };
-    var shout = function(str){ return str.toUpperCase() };
+describe('compose', () => {
+    var appendWithHellYea = str => str + 'hell yea!';
+    var appendSpace = str => str + ' ';
+    var shout = str => str.toUpperCase();
     var hellYea = _.compose(appendWithHellYea, appendSpace, shout);
 
-    it('should chain the return value from right to left through the functions provided', function(){
+    it('should chain the return value from right to left through the functions provided', () => {
         a.equal(hellYea('functions!'), 'FUNCTIONS! hell yea!');
     });
 
-    it('should return a curried function as a result', function(){
-        var prependWoo = function(str){ return 'Woo! ' + str };
+    it('should return a curried function as a result', () => {
+        var prependWoo = str => 'Woo! ' + str;
         var hellYeaWithLeadingWoo = _.compose(hellYea, prependWoo);
 
         a.equal(hellYeaWithLeadingWoo('functions!'), 'WOO! FUNCTIONS! hell yea!');
     });
 });
 
-describe('pipe', function(){
-    var appendWithHellYea = function(str){ return str + 'hell yea!' };
-    var appendSpace = function(str){ return str + ' ' };
-    var shout = function(str){ return str.toUpperCase() };
+describe('pipe', () => {
+    var appendWithHellYea = str => str + 'hell yea!';
+    var appendSpace = str => str + ' ';
+    var shout = str => str.toUpperCase();
     var hellYea = _.pipe(shout, appendSpace, appendWithHellYea);
 
-    it('should chain the return value from left to right through the functions provided', function(){
+    it('should chain the return value from left to right through the functions provided', () => {
         a.equal(hellYea('functions!'), 'FUNCTIONS! hell yea!');
     });
 
-    it('should return a curried function as a result', function(){
-        var prependWoo = function(str){ return 'Woo! ' + str };
+    it('should return a curried function as a result', () => {
+        var prependWoo = str => 'Woo! ' + str;
         var hellYeaWithLeadingWoo = _.pipe(prependWoo, hellYea);
 
         a.equal(hellYeaWithLeadingWoo('functions!'), 'WOO! FUNCTIONS! hell yea!');
     });
 });
 
-describe('negate', function(){
-    it('should flip falsey returns to true, and truthy returns to false', function(){
-        var isTruthy = function(a){ return !!a };
+describe('negate', () => {
+    it('should flip falsey returns to true, and truthy returns to false', () => {
+        var isTruthy = a => !!a;
         var isFalsey = _.negate(isTruthy);
 
         a.equal(isFalsey(0), true);
@@ -53,9 +53,9 @@ describe('negate', function(){
     });
 });
 
-describe('flip', function(){
-    it('should flip and curry', function(){
-        var prependWith = _.curry(function(a, b){ return a + b });
+describe('flip', () => {
+    it('should flip and curry', () => {
+        var prependWith = _.curry((a, b) => a + b);
         var appendWith = _.flip(prependWith);
         var appendIsm = appendWith('ism');
 
@@ -63,17 +63,17 @@ describe('flip', function(){
     });
 });
 
-describe('identity', function(){
-    it('should return the value passed in', function(){
+describe('identity', () => {
+    it('should return the value passed in', () => {
         var o = {}
         a.equal(_.identity(o), o);
     });
 });
 
-describe('tap', function(){
-    it('should execute the function given for the side effect, and return the second val', function(){
+describe('tap', () => {
+    it('should execute the function given for the side effect, and return the second val', () => {
         var logs = [];
-        var log = function(a){ logs.push(a) };
+        var log = a => { logs.push(a) };
 
         var identityLog = _.tap(log);
 
@@ -82,14 +82,14 @@ describe('tap', function(){
     });
 });
 
-describe('constant', function(){
-    it('should return a function that will return the value passed when called', function(){
+describe('constant', () => {
+    it('should return a function that will return the value passed when called', () => {
         a.equal(_.constant('a')(), 'a')
     });
 });
 
-describe('curry', function(){
-    it('should be exported (same as npm/curry)', function(){
+describe('curry', () => {
+    it('should be exported (same as npm/curry)', () => {
         a.equal(_.curry, require('curry'));
     });
 });

@@ -1,46 +1,43 @@
 var curry = require('curry');
 var r = require('restrictary');
-var unary = r.unary, binary = r.binary;
+var unary = r.unary;
+var binary = r.binary;
 
 var object = require('./object');
 var negate = require('./function').negate;
 
-var isArray = Array.isArray || function(val){ return Object.prototype.toString.call(val) === '[object Array]' };
+var isArray = Array.isArray || (val => Object.prototype.toString.call(val) === '[object Array]');
 
-var mapObject = function(o, fn){
+var mapObject = (o, fn) => {
     var r = {};
     for ( var p in o ) if ( o.hasOwnProperty(p) ) r[p] = fn(o[p]);
     return r;
 }
 
-var filterObject = function(o, fn){
+var filterObject = (o, fn) => {
     var r = {};
     for ( var p in o ) if ( o.hasOwnProperty(p) && fn(o[p]) ) r[p] = o[p];
     return r;
 }
 
-var everyObject = function(o, fn){
+var everyObject = (o, fn) => {
     for ( var p in o ) if ( o.hasOwnProperty(p) && !fn(o[p]) ) return false;
     return true;
 }
 
-var someObject = function(o, fn){
+var someObject = (o, fn) => {
     for ( var p in o ) if ( o.hasOwnProperty(p) && fn(o[p]) ) return true;
     return false;
 }
 
-var reduceFromObject = function(o, fn, val){
-    return object.values(o).reduce(fn, val);
-}
+var reduceFromObject = (o, fn, val) => object.values(o).reduce(fn, val)
 
-var reduceObject = function(o, fn){
-    return object.values(o).reduce(fn);
-}
+var reduceObject = (o, fn) => object.values(o).reduce(fn)
 
 //---- COLLECTION ----// 
 
 // (a -> b), Collection -> Collection
-var map = curry(function(fn, val){
+var map = curry((fn, val) => {
     fn = unary(fn);
 
     if ( isArray(val) ) return val.map(fn)
@@ -48,7 +45,7 @@ var map = curry(function(fn, val){
 });
 
 // (a -> Boolean), Collection -> Collection
-var filter = curry(function(fn, val){
+var filter = curry((fn, val) => {
     fn = unary(fn);
 
     if ( isArray(val) ) return val.filter(fn);
@@ -56,12 +53,10 @@ var filter = curry(function(fn, val){
 });
 
 // (a -> Boolean), Collection -> Collection
-var reject = curry(function(fn, val){
-    return filter(negate(fn), val);
-});
+var reject = curry((fn, val) => filter(negate(fn), val));
 
 // (a -> Boolean), Collection -> Boolean
-var every = curry(function(fn, val){ 
+var every = curry((fn, val) => { 
     fn = unary(fn);
 
     if ( isArray(val) ) return val.every(fn);
@@ -69,7 +64,7 @@ var every = curry(function(fn, val){
 });
 
 // (a -> Boolean), Collection -> Boolean
-var some = curry(function(fn, val){ 
+var some = curry((fn, val) => { 
     fn = unary(fn);
 
     if ( isArray(val) ) return val.some(fn);
@@ -78,7 +73,7 @@ var some = curry(function(fn, val){
 
 
 // (a, b -> c), Collection -> c
-var reduce = curry(function(fn, val){
+var reduce = curry((fn, val) => {
     fn = binary(fn);
 
     if ( isArray(val) ) return val.reduce(fn);
@@ -86,7 +81,7 @@ var reduce = curry(function(fn, val){
 });
 
 // (a, b -> c), Collection -> c
-var reduceRight = curry(function(fn, val){
+var reduceRight = curry((fn, val) => {
     fn = binary(fn);
 
     if ( isArray(val) ) return val.reduceRight(fn);
@@ -94,7 +89,7 @@ var reduceRight = curry(function(fn, val){
 });
 
 // (a, b -> c), d, Collection -> c
-var reduceFrom = curry(function(fn, seed, val){
+var reduceFrom = curry((fn, seed, val) => {
     fn = binary(fn);
 
     if ( isArray(val) ) return val.reduce(fn, seed);
@@ -102,7 +97,7 @@ var reduceFrom = curry(function(fn, seed, val){
 });
 
 // (a, b -> c), d, Collection -> c
-var reduceRightFrom = curry(function(fn, seed, val){
+var reduceRightFrom = curry((fn, seed, val) => {
     fn = binary(fn);
 
     if ( isArray(val) ) return val.reduceRight(fn, seed);
@@ -110,13 +105,13 @@ var reduceRightFrom = curry(function(fn, seed, val){
 });
 
 module.exports = { 
-    map: map,
-    filter: filter,
-    reject: reject,
-    every: every,
-    some: some, 
-    reduce: reduce,
-    reduceRight: reduceRight, 
-    reduceFrom: reduceFrom,
-    reduceRightFrom: reduceRightFrom
+    map,
+    filter,
+    reject,
+    every,
+    some, 
+    reduce,
+    reduceRight, 
+    reduceFrom,
+    reduceRightFrom
 }
