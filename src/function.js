@@ -3,56 +3,48 @@
 var curry = require('curry');
 var arr = require('./array');
 
-var toArray = function(arrayLike){ return Array.prototype.slice.call(arrayLike) }
+var toArray = arrayLike => Array.prototype.slice.call(arrayLike)
 
 // fn, fn ... -> fn
-var compose = function(){
-    var fns = toArray(arguments);
+var compose = function(...args) {
+    var fns = toArray(args);
     var lastFn = arr.last(fns);
     var initialFns = arr.initial(fns);
-    return curry.to(lastFn.length, function(){
-        var seed = lastFn.apply(null, arguments);
-        return initialFns.reduceRight(function(val, fn){ return fn(val) }, seed);
+    return curry.to(lastFn.length, function(...args) {
+        var seed = lastFn(...args);
+        return initialFns.reduceRight((val, fn) => fn(val), seed);
     });
 };
 
 // fn, fn ... -> fn
-var pipe = function(){
-    var reversedArgs = toArray(arguments).reverse();
-    return compose.apply(null, reversedArgs);
+var pipe = function(...args) {
+    var reversedArgs = toArray(args).reverse();
+    return compose(...reversedArgs);
 }
 
-var negate = curry(function(fn, a){
-    return !fn(a);
-});
+var negate = curry((fn, a) => !fn(a));
 
 // val -> val
-var identity = function(val){
-    return val;
-}
+var identity = val => val
 
 // val -> (-> val)
-var constant = function(val){
-    return function(){ return val };
-};
+var constant = val => () => val;
 
 // ( a, b -> val ), b, a -> val
-var flip = curry(function(fn, a, b){
-    return fn(b, a);
-});
+var flip = curry((fn, a, b) => fn(b, a));
 
 // ( a -> ), a -> a
-var tap = curry(function(fn, a){
+var tap = curry((fn, a) => {
     fn(a); return a;
 });
 
 module.exports = {
-    compose: compose,
-    pipe: pipe,
-    negate: negate,
-    identity: identity,
-    constant: constant,
-    flip: flip,
-    tap: tap,
-    curry: curry
+    compose,
+    pipe,
+    negate,
+    identity,
+    constant,
+    flip,
+    tap,
+    curry
 }

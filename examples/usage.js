@@ -2,7 +2,7 @@ var curry = require('../');
 
 //-- creating a curried function is pretty
 //-- straight forward:
-var add = curry(function(a, b){ return a + b });
+var add = curry((a, b) => a + b);
 
 //-- it can be called like normal:
 add(1, 2) //= 3
@@ -18,9 +18,7 @@ add1(2) //= 3;
 
 //-- in this case, a function and two arrays is expected
 //-- (fn, a, b).  zipWith will combine two arrays using a function:
-var zipWith = curry(function(fn, a, b){
-    return a.map(function(val, i){ return fn(val, b[i]) });
-});
+var zipWith = curry((fn, a, b) => a.map((val, i) => fn(val, b[i])));
 
 //-- if there are still more arguments required, a curried function
 //-- will always return a new curried function:
